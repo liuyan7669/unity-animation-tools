@@ -1,0 +1,10 @@
+{
+  "name": "Cowart.AnimationTools.Editor",
+  "rootNamespace": "Cowart.AnimationTools.Editor",
+  "references": [
+    "Cowart.AnimationTools"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

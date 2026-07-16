@@ -1,0 +1,20 @@
+{
+  "name": "com.cowart.animation-tools",
+  "version": "1.0.0",
+  "displayName": "Animation Tools",
+  "description": "提供 Animator 播放控制、动画事件回调和 Humanoid 骨骼节点管理功能。",
+  "unity": "2021.3",
+  "author": {
+    "name": "Cowart"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liuyan7669/unity-animation-tools.git"
+  },
+  "keywords": [
+    "animation",
+    "animator",
+    "humanoid"
+  ]
+}
