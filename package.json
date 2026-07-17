@@ -1,6 +1,6 @@
 {
   "name": "com.cowart.animation-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Animation Tools",
   "description": "提供 Animator 播放控制、动画事件回调和 Humanoid 骨骼节点管理功能。",
   "unity": "2021.3",
@@ -16,5 +16,12 @@
     "animation",
     "animator",
     "humanoid"
+  ],
+  "samples": [
+    {
+      "displayName": "DOTween Controllers",
+      "description": "依赖 DOTween 的 Transform 和角色补间移动控制器。",
+      "path": "Samples~/DOTween Controllers"
+    }
   ]
 }
