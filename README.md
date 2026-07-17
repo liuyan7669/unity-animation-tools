@@ -1,18 +1,282 @@
 # Animation Tools
 
-Reusable Animator playback and Humanoid body-part utilities for Unity.
+面向 Unity 项目的动画辅助工具包，提供 Animator 状态播放、完成回调、顺序与重复播放、运行时动画事件，以及 Humanoid 骨骼节点映射功能。
 
-## Features
+包内还提供可选的 DOTween 控制器 Sample，用于按速度控制 Transform 和角色的移动、路径移动及旋转。
 
-- Play Animator states with completion callbacks.
-- Register and trigger animation actions.
-- Map `HumanBodyBones` values to scene transforms.
-- Inspect body-part mappings with a dedicated property drawer.
+## 功能
 
-## Optional integrations
+### Animator 播放控制
 
-The `DOTween Controllers` sample provides transform and character movement controllers. Install DOTween before importing the sample from Package Manager.
+`AnimatorPlaybackController` 对 Unity Animator 的常用播放操作进行了统一封装：
 
-## Requirements
+- 播放指定 Animator State
+- 从指定归一化时间开始播放
+- 动画播放完成回调
+- 按列表顺序连续播放多个动画
+- 按指定次数重复播放动画
+- 固定到动画第一帧、指定进度或最后一帧
+- 调整 Animator 播放速度
+- 暂停和恢复当前动画
+- 查询当前动画片段与 Animator State 信息
+- 支持继承并重写 `virtual` 方法扩展项目行为
 
-- Unity 2021.3 or newer
+### 运行时动画事件
+
+可以通过代码为动画片段注册带唯一键的运行时事件：
+
+- 按动画片段名称和事件键添加回调
+- 指定事件触发时间
+- 可选择替换已存在的同键事件
+- 移除单个事件
+- 清除指定动画片段或全部动画片段的事件
+- 根据事件键手动触发回调
+
+### Humanoid 骨骼映射
+
+`CharacterBodyParts` 用于维护 `HumanBodyBones` 与场景 Transform 的对应关系：
+
+- Reset 时自动生成全部有效 Humanoid 骨骼配置项
+- 在 Inspector 中配置骨骼对应节点
+- 通过 `GetPart` 获取指定骨骼节点
+- 通过 `TryGetPart` 安全查询骨骼节点
+- 提供专用属性绘制器，便于在 Inspector 中编辑映射
+
+## 安装
+
+### 通过 OpenUPM 安装
+
+在 Unity 的 `Edit > Project Settings > Package Manager` 中添加：
+
+```text
+Name: package.openupm.com
+URL: https://package.openupm.com
+Scope: com.cowart.animation-tools
+```
+
+然后在 Package Manager 中选择 `Add package by name`，输入：
+
+```text
+com.cowart.animation-tools
+```
+
+### 通过 Git URL 安装
+
+在 Package Manager 中选择 `Add package from git URL`，输入：
+
+```text
+https://github.com/liuyan7669/unity-animation-tools.git#1.0.1
+```
+
+## 使用方法
+
+运行时代码统一使用以下命名空间：
+
+```csharp
+using Cowart.AnimationTools;
+```
+
+### 播放单个动画
+
+将 `AnimatorPlaybackController` 添加到带有 Animator 的 GameObject，然后调用：
+
+```csharp
+using Cowart.AnimationTools;
+using UnityEngine;
+
+public class AnimationExample : MonoBehaviour
+{
+    [SerializeField] private AnimatorPlaybackController animationController;
+
+    private void Start()
+    {
+        animationController.Play("Walk", () =>
+        {
+            Debug.Log("Walk 播放完成");
+        });
+    }
+}
+```
+
+如果目标 GameObject 没有 Animator，首次访问 `AnimatorComponent` 时会自动添加。
+
+### 从指定进度播放
+
+`normalizedTime` 使用 0 到 1 的归一化时间：
+
+```csharp
+animationController.Play(
+    "Walk",
+    0.5f,
+    () => Debug.Log("从中间开始播放并完成"));
+```
+
+### 顺序播放动画列表
+
+```csharp
+using System.Collections.Generic;
+
+List<string> states = new List<string>
+{
+    "Idle",
+    "Walk",
+    "Run"
+};
+
+animationController.PlayList(
+    0,
+    states,
+    index => Debug.Log($"第 {index} 个动画播放完成"),
+    () => Debug.Log("动画列表全部播放完成"));
+```
+
+### 重复播放动画
+
+```csharp
+animationController.PlayWhile(
+    "Attack",
+    3,
+    () => Debug.Log("重复播放完成"),
+    remaining => Debug.Log($"开始播放，剩余次数：{remaining}"),
+    remaining => Debug.Log($"本次播放完成，剩余次数：{remaining}"));
+```
+
+### 固定动画画面
+
+```csharp
+animationController.FixedToFirstFrame("Idle");
+animationController.FixedToNormalizedTime("Walk", 0.5f);
+animationController.FixedToLastFrame("Victory");
+```
+
+### 设置速度与暂停状态
+
+```csharp
+animationController.PlaySpeed = 1.5f;
+animationController.IsPause = true;
+animationController.IsPause = false;
+```
+
+### 添加运行时动画事件
+
+```csharp
+animationController.AddEvent(
+    "Attack",
+    "ApplyDamage",
+    () => Debug.Log("触发伤害判定"),
+    0.35f);
+```
+
+管理事件：
+
+```csharp
+animationController.ManuallyCallEvent("Attack", "ApplyDamage");
+animationController.RemoveEvent("Attack", "ApplyDamage");
+animationController.ClearEvent("Attack");
+animationController.ClearEvent();
+```
+
+同一动画片段内的 `actionKey` 应保持唯一。需要覆盖已存在事件时，将 `forceReplace` 设置为 `true`。
+
+### 查询 Humanoid 骨骼节点
+
+将 `CharacterBodyParts` 添加到角色根节点，通过 Inspector 配置骨骼映射：
+
+```csharp
+using Cowart.AnimationTools;
+using UnityEngine;
+
+public class BodyPartExample : MonoBehaviour
+{
+    [SerializeField] private CharacterBodyParts bodyParts;
+
+    private void Start()
+    {
+        Transform rightHand = bodyParts.GetPart(HumanBodyBones.RightHand);
+
+        if (bodyParts.TryGetPart(HumanBodyBones.Head, out Transform head))
+        {
+            Debug.Log($"头部节点：{head.name}");
+        }
+    }
+}
+```
+
+## DOTween Controllers Sample
+
+从 `1.0.1` 开始，Package Manager 的 Samples 区域提供：
+
+```text
+DOTween Controllers
+```
+
+导入前必须先安装 DOTween。该 Sample 不会在默认安装包时参与编译，只有点击 Import 后才会复制到项目的 `Assets/Samples` 目录。
+
+导入后的代码使用：
+
+```csharp
+using Cowart.AnimationTools.DOTween;
+```
+
+### TransformTweenController
+
+提供以下能力：
+
+- 按世界单位/秒移动到目标位置
+- 沿 Transform 路径点以恒定速度移动
+- 路径移动期间自动朝向前方
+- 路径点开始和到达回调
+- 按角度/秒旋转到目标朝向
+- 单独停止移动或旋转补间
+- 自动清理正在运行的 Tween
+
+示例：
+
+```csharp
+using Cowart.AnimationTools.DOTween;
+using UnityEngine;
+
+public class TweenMovementExample : MonoBehaviour
+{
+    [SerializeField] private TransformTweenController controller;
+    [SerializeField] private Transform target;
+    [SerializeField] private Transform[] pathPoints;
+
+    public void MoveToTarget()
+    {
+        controller.MoveTo(target, () => Debug.Log("移动完成"));
+    }
+
+    public void MoveAlongPath()
+    {
+        controller.MoveAlongPath(
+            pathPoints,
+            true,
+            () => Debug.Log("路径移动完成"));
+    }
+}
+```
+
+### CharacterTweenController
+
+`CharacterTweenController` 当前继承 `TransformTweenController` 的全部行为，并作为角色专用扩展入口，便于后续增加角色相关控制。
+
+## 主要类型
+
+| 类型 | 说明 |
+| --- | --- |
+| `IAnimatorPlaybackController` | 动画播放、状态查询和运行时事件管理接口 |
+| `AnimatorPlaybackController` | Animator 播放控制组件 |
+| `AnimatorAction` | 运行时动画事件数据 |
+| `CharacterBodyParts` | Humanoid 骨骼节点映射组件 |
+| `TransformTweenController` | DOTween Transform 移动与旋转控制器，仅 Sample |
+| `CharacterTweenController` | 角色补间控制扩展入口，仅 Sample |
+
+## 环境要求
+
+- Unity 2021.3 或更高版本
+- DOTween，仅在导入 `DOTween Controllers` Sample 时需要
+
+## 许可证
+
+本包使用 MIT License，详情参见仓库中的许可证文件。
