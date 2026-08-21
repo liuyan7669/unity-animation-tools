@@ -8,11 +8,13 @@
 
 ### Animator 播放控制
 
-`AnimatorPlaybackController` 对 Unity Animator 的常用播放操作进行了统一封装：
+`AnimatorPlayer` 对 Unity Animator 的常用播放操作进行了统一封装：
 
 - 播放指定 Animator State
 - 从指定归一化时间开始播放
 - 动画播放完成回调
+- 从 StateName 列表中随机播放一个动画
+- 随机且不重复地播放 StateName 列表中的全部动画
 - 按列表顺序连续播放多个动画
 - 按指定次数重复播放动画
 - 固定到动画第一帧、指定进度或最后一帧
@@ -65,7 +67,7 @@ com.cowart.animation-tools
 在 Package Manager 中选择 `Add package from git URL`，输入：
 
 ```text
-https://github.com/liuyan7669/unity-animation-tools.git#1.0.1
+https://github.com/liuyan7669/unity-animation-tools.git#2.0.0
 ```
 
 ## 使用方法
@@ -78,7 +80,7 @@ using Cowart.AnimationTools;
 
 ### 播放单个动画
 
-将 `AnimatorPlaybackController` 添加到带有 Animator 的 GameObject，然后调用：
+将 `AnimatorPlayer` 添加到带有 Animator 的 GameObject，然后调用：
 
 ```csharp
 using Cowart.AnimationTools;
@@ -86,7 +88,7 @@ using UnityEngine;
 
 public class AnimationExample : MonoBehaviour
 {
-    [SerializeField] private AnimatorPlaybackController animationController;
+    [SerializeField] private AnimatorPlayer animationController;
 
     private void Start()
     {
@@ -110,6 +112,42 @@ animationController.Play(
     0.5f,
     () => Debug.Log("从中间开始播放并完成"));
 ```
+
+### 随机播放动画
+
+从列表中的有效 StateName 里随机选择一个动画播放，播放完成后执行回调：
+
+```csharp
+using System.Collections.Generic;
+
+List<string> states = new List<string>
+{
+    "Idle",
+    "Walk",
+    "Run"
+};
+
+int selectedIndex = animationController.PlayRandom(
+    states,
+    () => Debug.Log("随机动画播放完成"));
+
+Debug.Log($"随机抽中的列表索引：{selectedIndex}");
+```
+
+返回值是随机动画在原列表中的索引；列表中没有有效 StateName 时返回 `-1`。
+
+### 随机播放整个动画列表
+
+随机抽取并播放列表中的动画。每个动画只会被抽取一次，全部播放完成后执行回调：
+
+```csharp
+animationController.PlayRandomList(
+    states,
+    stateName => Debug.Log($"{stateName} 播放完成"),
+    () => Debug.Log("随机列表全部播放完成"));
+```
+
+每个随机动画播放完成时会通过 `stateName` 返回动画状态名称。方法会创建内部列表副本，并只从副本中移除已抽取项，不会修改传入的 `states`。
 
 ### 顺序播放动画列表
 
@@ -265,8 +303,7 @@ public class TweenMovementExample : MonoBehaviour
 
 | 类型 | 说明 |
 | --- | --- |
-| `IAnimatorPlaybackController` | 动画播放、状态查询和运行时事件管理接口 |
-| `AnimatorPlaybackController` | Animator 播放控制组件 |
+| `AnimatorPlayer` | Animator 播放控制组件 |
 | `AnimatorAction` | 运行时动画事件数据 |
 | `CharacterBodyParts` | Humanoid 骨骼节点映射组件 |
 | `TransformTweenController` | DOTween Transform 移动与旋转控制器，仅 Sample |
