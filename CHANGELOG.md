@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.1] - 2026-08-23
+
+- 新增包专用图标，并将包内组件脚本的默认图标统一替换为该图标。
+
 ## [2.0.0] - 2026-08-21
 
 - Breaking: Renamed the Animator playback component to `AnimatorPlayer`.
