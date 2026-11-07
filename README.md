@@ -67,7 +67,7 @@ com.cowart.animation-tools
 在 Package Manager 中选择 `Add package from git URL`，输入：
 
 ```text
-https://github.com/liuyan7669/unity-animation-tools.git#2.0.1
+https://github.com/liuyan7669/unity-animation-tools.git#2.0.2
 ```
 
 ## 使用方法

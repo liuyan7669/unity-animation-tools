@@ -1,6 +1,6 @@
 {
   "name": "com.cowart.animation-tools",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "displayName": "Animation Tools",
   "description": "提供 Animator 播放控制、动画事件回调和 Humanoid 骨骼节点管理功能。",
   "unity": "2021.3",
