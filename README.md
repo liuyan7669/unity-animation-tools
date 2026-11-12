@@ -1,4 +1,4 @@
-# Animation Tools
+# Animator Player
 
 面向 Unity 项目的动画辅助工具包，提供 Animator 状态播放、完成回调、顺序与重复播放、运行时动画事件，以及 Humanoid 骨骼节点映射功能。
 
@@ -53,13 +53,13 @@
 ```text
 Name: package.openupm.com
 URL: https://package.openupm.com
-Scope: com.cowart.animation-tools
+Scope: com.cowart.animator-player
 ```
 
 然后在 Package Manager 中选择 `Add package by name`，输入：
 
 ```text
-com.cowart.animation-tools
+com.cowart.animator-player
 ```
 
 ### 通过 Git URL 安装
@@ -67,7 +67,7 @@ com.cowart.animation-tools
 在 Package Manager 中选择 `Add package from git URL`，输入：
 
 ```text
-https://github.com/liuyan7669/unity-animation-tools.git#2.0.2
+https://github.com/liuyan7669/unity-animator-player.git#3.0.0
 ```
 
 ## 使用方法
@@ -75,7 +75,7 @@ https://github.com/liuyan7669/unity-animation-tools.git#2.0.2
 运行时代码统一使用以下命名空间：
 
 ```csharp
-using Cowart.AnimationTools;
+using Cowart.AnimatorPlayer;
 ```
 
 ### 播放单个动画
@@ -83,7 +83,7 @@ using Cowart.AnimationTools;
 将 `AnimatorPlayer` 添加到带有 Animator 的 GameObject，然后调用：
 
 ```csharp
-using Cowart.AnimationTools;
+using Cowart.AnimatorPlayer;
 using UnityEngine;
 
 public class AnimationExample : MonoBehaviour
@@ -221,7 +221,7 @@ animationController.ClearEvent();
 将 `CharacterBodyParts` 添加到角色根节点，通过 Inspector 配置骨骼映射：
 
 ```csharp
-using Cowart.AnimationTools;
+using Cowart.AnimatorPlayer;
 using UnityEngine;
 
 public class BodyPartExample : MonoBehaviour
@@ -253,7 +253,7 @@ DOTween Controllers
 导入后的代码使用：
 
 ```csharp
-using Cowart.AnimationTools.DOTween;
+using Cowart.AnimatorPlayer.DOTween;
 ```
 
 ### TransformTweenController
@@ -271,7 +271,7 @@ using Cowart.AnimationTools.DOTween;
 示例：
 
 ```csharp
-using Cowart.AnimationTools.DOTween;
+using Cowart.AnimatorPlayer.DOTween;
 using UnityEngine;
 
 public class TweenMovementExample : MonoBehaviour
@@ -317,3 +317,11 @@ public class TweenMovementExample : MonoBehaviour
 ## 许可证
 
 本包使用 MIT License，详情参见仓库中的许可证文件。
+
+## 改名迁移（3.0.0）
+
+- 包标识：`com.cowart.animation-tools` → `com.cowart.animator-player`。
+- Git 仓库：`https://github.com/liuyan7669/unity-animation-tools.git` → `https://github.com/liuyan7669/unity-animator-player.git`；原有提交和旧 tag 保留。
+- 程序集、命名空间、示例和测试已同步使用新名称。业务项目需更新 manifest、asmdef 和 using；旧包与新包不可同时安装。
+- 资源 .meta GUID 保留；已改命名空间的运行时类型提供 MovedFrom 迁移标记。已有源码仍需按新命名空间修改。
+- 示例中的可选集成依赖保持可选，核心包不新增其他 Cowart 包依赖。

@@ -2,18 +2,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Cowart.AnimationTools
+namespace Cowart.AnimatorPlayer
 {
 /// <summary>
 /// 保存 Humanoid 骨骼类型与场景节点之间的对应关系。
 /// </summary>
 [DisallowMultipleComponent]
+[UnityEngine.Scripting.APIUpdating.MovedFrom(true, sourceNamespace: "Cowart.AnimationTools", sourceAssembly: "Cowart.AnimationTools", sourceClassName: "CharacterBodyParts")]
 public class CharacterBodyParts : MonoBehaviour
 {
     /// <summary>
     /// 单个人体骨骼及其对应的 Transform。
     /// </summary>
     [Serializable]
+    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, sourceNamespace: "Cowart.AnimationTools", sourceAssembly: "Cowart.AnimationTools", sourceClassName: "BodyPart")]
     public class BodyPart
     {
         [SerializeField] private HumanBodyBones bodyBone;

@@ -1,0 +1,10 @@
+{
+  "name": "Cowart.AnimatorPlayer.Editor",
+  "rootNamespace": "Cowart.AnimatorPlayer.Editor",
+  "references": [
+    "Cowart.AnimatorPlayer"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

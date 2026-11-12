@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Cowart.AnimationTools
+namespace Cowart.AnimatorPlayer
 {
     /// <summary>
     /// 记录运行时动画事件及其回调。
     /// </summary>
     [Serializable]
+    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, sourceNamespace: "Cowart.AnimationTools", sourceAssembly: "Cowart.AnimationTools", sourceClassName: "AnimatorAction")]
     public class AnimatorAction
     {
         public string clipName;
@@ -38,6 +39,7 @@ namespace Cowart.AnimationTools
     /// </summary>
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-2000)]
+    [UnityEngine.Scripting.APIUpdating.MovedFrom(true, sourceNamespace: "Cowart.AnimationTools", sourceAssembly: "Cowart.AnimationTools", sourceClassName: "AnimatorPlayer")]
     public class AnimatorPlayer : MonoBehaviour
     {
         private const string AnimationEventCallbackName = "AnimationClipEventCallback";

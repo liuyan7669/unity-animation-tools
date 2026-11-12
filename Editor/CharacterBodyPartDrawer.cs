@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Cowart.AnimationTools.Editor
+namespace Cowart.AnimatorPlayer.Editor
 {
 /// <summary>
 /// 在 Inspector 中以人体骨骼名称绘制 CharacterBodyParts.BodyPart。

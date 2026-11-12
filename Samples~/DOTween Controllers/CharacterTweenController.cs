@@ -1,4 +1,4 @@
-namespace Cowart.AnimationTools.DOTween
+namespace Cowart.AnimatorPlayer.DOTween
 {
 /// <summary>
 /// 面向角色对象的补间移动控制器。

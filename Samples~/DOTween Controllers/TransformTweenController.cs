@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Cowart.AnimationTools.DOTween
+namespace Cowart.AnimatorPlayer.DOTween
 {
 /// <summary>
 /// 使用 DOTween 按指定速度控制物体的位置和旋转。
