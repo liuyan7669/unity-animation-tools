@@ -1,4 +1,5 @@
 using UnityEditor;
+using Cowart.InspectorGroups.Editor;
 using UnityEngine;
 
 namespace Cowart.AnimatorPlayer.Editor
@@ -7,41 +8,13 @@ namespace Cowart.AnimatorPlayer.Editor
 /// 在 Inspector 中以人体骨骼名称绘制 CharacterBodyParts.BodyPart。
 /// </summary>
 [CustomPropertyDrawer(typeof(CharacterBodyParts.BodyPart))]
-public class CharacterBodyPartDrawer : PropertyDrawer
+public class CharacterBodyPartDrawer : InspectorGroupsPropertyDrawer
 {
-    private const string BodyBonePropertyName = "bodyBone";
-    private const string TargetPropertyName = "target";
-
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    protected override GUIContent GetLabel(SerializedProperty property, GUIContent label)
     {
-        SerializedProperty bodyBoneProperty = property.FindPropertyRelative(BodyBonePropertyName);
-        SerializedProperty targetProperty = property.FindPropertyRelative(TargetPropertyName);
-        string bodyBoneName = GetBodyBoneName((HumanBodyBones)bodyBoneProperty.intValue);
-
-        EditorGUI.BeginProperty(position, label, property);
-
-        Rect lineRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-        float lineOffset = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-        property.isExpanded = EditorGUI.Foldout(lineRect, property.isExpanded, bodyBoneName, true);
-
-        if (property.isExpanded)
-        {
-            EditorGUI.indentLevel++;
-            lineRect.y += lineOffset;
-            EditorGUI.PropertyField(lineRect, bodyBoneProperty);
-            lineRect.y += lineOffset;
-            EditorGUI.PropertyField(lineRect, targetProperty);
-            EditorGUI.indentLevel--;
-        }
-
-        EditorGUI.EndProperty();
-    }
-
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        int lineCount = property.isExpanded ? 3 : 1;
-        return lineCount * EditorGUIUtility.singleLineHeight
-               + (lineCount - 1) * EditorGUIUtility.standardVerticalSpacing;
+        var bone = property.FindPropertyRelative("bodyBone");
+        if (bone == null || bone.propertyType != SerializedPropertyType.Enum) return label;
+        return new GUIContent(GetBodyBoneName((HumanBodyBones)bone.intValue), label.tooltip);
     }
 
     private static string GetBodyBoneName(HumanBodyBones bodyBone)

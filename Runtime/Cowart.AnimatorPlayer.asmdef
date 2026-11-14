@@ -1,4 +1,7 @@
 {
   "name": "Cowart.AnimatorPlayer",
-  "rootNamespace": "Cowart.AnimatorPlayer"
+  "rootNamespace": "Cowart.AnimatorPlayer",
+  "references": [
+    "Cowart.InspectorGroups"
+  ]
 }

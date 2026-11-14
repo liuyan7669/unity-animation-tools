@@ -67,7 +67,7 @@ com.cowart.animator-player
 在 Package Manager 中选择 `Add package from git URL`，输入：
 
 ```text
-https://github.com/liuyan7669/unity-animator-player.git#3.0.0
+https://github.com/liuyan7669/unity-animator-player.git#3.1.0
 ```
 
 ## 使用方法
@@ -324,4 +324,8 @@ public class TweenMovementExample : MonoBehaviour
 - Git 仓库：`https://github.com/liuyan7669/unity-animation-tools.git` → `https://github.com/liuyan7669/unity-animator-player.git`；原有提交和旧 tag 保留。
 - 程序集、命名空间、示例和测试已同步使用新名称。业务项目需更新 manifest、asmdef 和 using；旧包与新包不可同时安装。
 - 资源 .meta GUID 保留；已改命名空间的运行时类型提供 MovedFrom 迁移标记。已有源码仍需按新命名空间修改。
-- 示例中的可选集成依赖保持可选，核心包不新增其他 Cowart 包依赖。
+- 示例中的可选集成依赖保持可选，核心包仅依赖 Inspector Groups，业务包之间不互相依赖（Samples 除外）。
+
+## Inspector 统一依赖
+
+本包声明依赖 `com.cowart.inspector-groups` `3.1.0`，Inspector 样式统一由该基础包提供。安装前须配置 OpenUPM scoped registry（`https://package.openupm.com`，scope `com.cowart`）；UPM 会根据 dependencies 连带解析 Inspector Groups。使用未发布源码时，请同时使用本地 Inspector Groups 3.1.0。业务包之间不互相依赖，Samples 的可选组合不受此限制。

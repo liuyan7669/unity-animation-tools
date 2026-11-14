@@ -1,6 +1,6 @@
 {
   "name": "com.cowart.animator-player",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "displayName": "Animator Player",
   "description": "提供 Animator 播放控制、动画事件回调和 Humanoid 骨骼节点管理功能。",
   "unity": "2021.3",
@@ -23,5 +23,8 @@
       "description": "依赖 DOTween 的 Transform 和角色补间移动控制器。",
       "path": "Samples~/DOTween Controllers"
     }
-  ]
+  ],
+  "dependencies": {
+    "com.cowart.inspector-groups": "3.1.0"
+  }
 }

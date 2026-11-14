@@ -2,7 +2,9 @@
   "name": "Cowart.AnimatorPlayer.Editor",
   "rootNamespace": "Cowart.AnimatorPlayer.Editor",
   "references": [
-    "Cowart.AnimatorPlayer"
+    "Cowart.AnimatorPlayer",
+    "Cowart.InspectorGroups.Editor",
+    "Cowart.InspectorGroups"
   ],
   "includePlatforms": [
     "Editor"
